@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Preuba2temperatura</string>
+    <string name="sensor_tem_normal">Sensor Temperatura</string>
+    <string name="sensor_tem_am">Sensor Temperatura ambiente</string>
+    <string name="temperatura">Temperatura</string>
+    <string name="centigrados">ºC</string>
+    <string name="fahrenheit">ºF</string>
+</resources>
