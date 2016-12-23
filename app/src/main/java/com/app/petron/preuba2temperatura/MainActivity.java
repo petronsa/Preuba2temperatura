@@ -1,16 +1,25 @@
 package com.app.petron.preuba2temperatura;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import com.startapp.android.publish.StartAppAd;
+import com.startapp.android.publish.StartAppSDK;
 
 public class MainActivity extends AppCompatActivity {
     TextView textTEMPERATURE_available, textTEMPERATURE_reading;
@@ -20,10 +29,12 @@ public class MainActivity extends AppCompatActivity {
     TextView tvgradoswichc,tvgradosswichf,tvgradosswichc1,tvgradosswichf1;
     ImageView tempnormal,temamb;
     Switch sw1,sw2;
+    private StartAppAd startAppAd = new StartAppAd(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        StartAppSDK.init(this, "101423750", "203739616", true);
         textTEMPERATURE_available
                 = (TextView)findViewById(R.id.TEMPERATURE_available);
         textTEMPERATURE_reading
@@ -38,12 +49,14 @@ public class MainActivity extends AppCompatActivity {
         temperatura_nor = (TextView)findViewById(R.id.tv_Temperatura);
         sw1 = (Switch)findViewById(R.id.switch1);
         sw2 = (Switch)findViewById(R.id.switch2);
+        cargarpreferencias();
         tvgradosnor = (TextView)findViewById(R.id.tvgrados1);
         tvgradosam = (TextView)findViewById(R.id.tvgrados2);
         tvgradoswichc = (TextView)findViewById(R.id.tvgradosc);
         tvgradosswichf = (TextView)findViewById(R.id.tvgradosf);
         tvgradosswichc1 = (TextView)findViewById(R.id.tvgradosc1);
         tvgradosswichf1 = (TextView)findViewById(R.id.tvgradosf2);
+
 
         SensorManager mySensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
 
@@ -82,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
             tvgradosswichf1.setText("");
             sw2.setVisibility(View.INVISIBLE);
         }
+
     }
 
     private final SensorEventListener TemperatureSensorListener
@@ -131,6 +145,8 @@ public class MainActivity extends AppCompatActivity {
                     tvgradosnor.setTextColor(getResources().getColor(R.color.color_frio));
                 }
 
+
+
                 //poner el swicht a escuchar
 
                 sw1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -156,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
 
-
+                guardarpreferencias();
                 textTEMPERATURE_reading.setText(mostrar_normal[0]);
             }
         }
@@ -212,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //poner el swicht a escuchar
 
+
                 sw2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView1, boolean isChecked) {
@@ -233,11 +250,49 @@ public class MainActivity extends AppCompatActivity {
                     mostrar_ambiente[0]= convertido1;
                     tvgradosam.setText("ºC");
                 }
-
+                guardarpreferencias();
                 textAMBIENT_TEMPERATURE_reading.setText(mostrar_ambiente[0]);
             }
         }
 
     };
+                public void cargarpreferencias(){
+                    SharedPreferences preferences = getSharedPreferences("Preferencias", Context.MODE_PRIVATE);
+                    sw1.setChecked(preferences.getBoolean("estado1",false));
+                    sw2.setChecked(preferences.getBoolean("estado2",false));
+                }
+
+                public void guardarpreferencias (){
+                    SharedPreferences preferences = getSharedPreferences("Preferencias",Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    boolean valor1 = sw1.isChecked();
+                    boolean valor2 = sw2.isChecked();
+                    editor.putBoolean("estado1",valor1);
+                    editor.putBoolean("estado2",valor2);
+                    editor.commit();
+                }
+            public void onBackPressed(){
+                super.onBackPressed();
+                guardarpreferencias();
+            }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item){
+            Intent explicit_intent;
+
+            switch (item.getItemId()){
+                case R.id.action_exit:
+                    guardarpreferencias();
+
+                    finish();
+                    break;
+            }
+            return super.onOptionsItemSelected(item);
+        }
     }
 

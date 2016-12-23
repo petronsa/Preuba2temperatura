@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:text="@string/temperatura"
             android:id="@+id/tv_Temperatura"
-            android:textSize="40dp" />
+            android:textSize="30sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -131,7 +131,7 @@
             android:layout_height="wrap_content"
             android:text="@string/temperatura"
             android:id="@+id/tv_Temperatura_amb"
-            android:textSize="40dp" />
+            android:textSize="30sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -180,7 +180,6 @@
             android:id="@+id/tvgrados2"
             android:textSize="40dp" />
     </LinearLayout>
-
     <com.startapp.android.publish.banner.Banner
         android:id="@+id/startAppBanner"
         android:layout_width="wrap_content"
@@ -189,8 +188,7 @@
         android:layout_alignParentTop="false"
         android:layout_centerHorizontal="false"
         android:paddingBottom="5dp"
-        android:clipToPadding="false"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="center" />
+        android:layout_gravity="bottom|center_horizontal"
+        android:clipToPadding="false" />
 
 </LinearLayout>
